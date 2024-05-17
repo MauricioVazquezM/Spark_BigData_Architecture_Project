@@ -83,8 +83,15 @@ ax0.set_title('Time Series Forecasting')
 
 
 ##### MATRICES #####
-# Seed for reproducibility
-np.random.seed(0)
+
+# Industries
+financial_services = ['BRK-B', 'JPM', 'BAC', 'WFC', 'GS']
+consumer_staples = ['PG', 'PEP', 'KO', 'COST', 'WMT']
+consumer_discretionary = ['AMZN', 'TSLA', 'MCD', 'HD', 'LOW']
+communication_services = ['META', 'GOOGL', 'GOOG', 'NFLX', 'AAPL']
+
+# Combinar todas las listas en una sola
+all_symbols = financial_services + consumer_staples + consumer_discretionary + communication_services
 
 # Creating a DataFrame with 10 variables and 100 observations
 data = {
@@ -103,22 +110,22 @@ correlation_matrix = df.corr()
 # Set up the plotting figure and axes
 ax1 = plt.subplot2grid((3, 2), (1, 0))
 sns.heatmap(correlation_matrix, annot=True, fmt=".2f", cmap='coolwarm',cbar=False, ax=ax1)
-ax1.set_title('Real-time Correlation Matrix')
+ax1.set_title('Real-time Correlation Matrix Financial Services Industry')
 
 # Set up the plotting figure and axes
 ax2 = plt.subplot2grid((3, 2), (1, 1))
 sns.heatmap(correlation_matrix, annot=True, fmt=".2f", cmap='coolwarm',cbar=False, ax=ax2)
-ax2.set_title('Real-time Correlation Matrix')
+ax2.set_title('Real-time Correlation Matrix Consumer Staples Industry')
 
 # Set up the plotting figure and axes
 ax3 = plt.subplot2grid((3, 2), (2, 0))
 sns.heatmap(correlation_matrix, annot=True, fmt=".2f", cmap='coolwarm',cbar=False, ax=ax3)
-ax3.set_title('Real-time Correlation Matrix')
+ax3.set_title('Real-time Correlation Matrix Consumer Discretionary Industry')
 
 # Set up the plotting figure and axes
 ax4 = plt.subplot2grid((3, 2), (2, 1))
 sns.heatmap(correlation_matrix, annot=True, fmt=".2f", cmap='coolwarm',cbar=False, ax=ax4)
-ax4.set_title('Real-time Correlation Matrix')
+ax4.set_title('Real-time Correlation Matrix Communication Services Industry')
 
 # Function to update the data in the heatmap
 def update(frame):
@@ -141,7 +148,6 @@ def update(frame):
             ax2.texts[i * len(correlation_matrix.columns) + j].set_text(f"{new_correlation_matrix.iloc[i, j]:.2f}")
             ax3.texts[i * len(correlation_matrix.columns) + j].set_text(f"{new_correlation_matrix.iloc[i, j]:.2f}")
             ax4.texts[i * len(correlation_matrix.columns) + j].set_text(f"{new_correlation_matrix.iloc[i, j]:.2f}")
-
 
 # Funcion animacion
 ani = FuncAnimation(fig, update, frames=np.arange(0, 200), blit=False, interval=1000, repeat=True) 

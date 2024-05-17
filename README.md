@@ -29,3 +29,17 @@ Additionally, the project requires performing comparisons of execution times usi
 - 1. ***Real-Time Data Capture:*** Implement a system using Apache Kafka or Spark Structured Streaming for real-time data ingestion.
 - 2. ***Model Training and Prediction:*** Once enough data is collected, train a machine learning model and use it for real-time predictions as new data streams in.
 - 3. ***Performance Evaluation:*** Test the application on different environments including a local cluster, standalone Spark setup, and a cloud platform like Databricks. Measure and compare the execution times to evaluate the performance of each platform.
+
+<br>
+
+This project aims to harness the capabilities of modern data processing frameworks to ensure efficient, real-time data analytics, crucial for dynamic machine learning model training and prediction. It also seeks to compare the computational efficiency and scalability of various computing environments to identify the best infrastructure for specific data science tasks.
+
+
+## Instructions
+
+- - To run the program, navigate to the "Spark_BigData_Architecture_Project" folder level and execute the following command in your console.
+
+***Execution Console Code***
+```powershell
+streamlit run Dashboard.py
+```

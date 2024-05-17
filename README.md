@@ -37,7 +37,7 @@ This project aims to harness the capabilities of modern data processing framewor
 
 ## Instructions
 
-- - To run the program, navigate to the "Spark_BigData_Architecture_Project" folder level and execute the following command in your console.
+- To run the program, navigate to the "Spark_BigData_Architecture_Project" folder level and execute the following command in your console.
 
 ***Execution Console Code***
 ```powershell

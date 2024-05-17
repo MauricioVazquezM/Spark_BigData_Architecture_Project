@@ -21,6 +21,7 @@ import matplotlib
 matplotlib.use('Agg')
 import os
 
+print("BUENOS DIAS WILMER")
 ## Layout set up
 st.set_page_config(page_title="Financial Analysis Dashboard", page_icon="📈", layout="wide")
 

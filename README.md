@@ -1,7 +1,7 @@
 # Spark Big Data Architecture Project
 
 <p align="center">
-  <img width="800" height="500" src="https://double.cloud/assets/blog/articles/what-is-data-stream-shema1.png.webp">
+  <img width="500" height="300" src="https://double.cloud/assets/blog/articles/what-is-data-stream-shema1.png.webp">
 </p>
 
 <br>

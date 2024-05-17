@@ -19,15 +19,21 @@ from pyspark.sql.types import StructType, StructField, StringType, FloatType, Ti
 from matplotlib.animation import FuncAnimation
 import matplotlib
 matplotlib.use('TkAgg')
+import sys
 
 # Initialize the figure
 fig = plt.figure(figsize=(12, 16))
 
 
-##### TIME SERIES FORESCASTING #####
-# Create the large scatter plot at the top
-symbol = 'AAPL'
-data = yf.download(symbol, period="1h", interval="1m")
+##### Process #####
+# Checink console
+if len(sys.argv)>1:
+    symbol = sys.argv[1]
+    print(f"The action to forecast is: {symbol}")
+else:
+    print("No parameter provided.")
+    sys.exit(1)
+data = yf.download(symbol, period="1d", interval="1m").tail(60)
 aux=[]
 for i in data['Close']:
     aux.append(i)
@@ -58,6 +64,13 @@ confidence_intervals_5 = pd.concat([empty5, confidence_intervals_5])
 confidence_intervals_1["Close"] = mean_forecast
 confidence_intervals_1 = pd.concat([empty1, confidence_intervals_1])
 
+min_close = confidence_intervals_1['Close'].min()
+max_close = confidence_intervals_1['Close'].max()
+mean = confidence_intervals_1['Close'].mean()
+
+
+##### TIME SERIES FORESCASTING #####
+# Create the large scatter plot at the top
 plt.rcParams['figure.figsize'] = [16, 5]
 
 ax0 = plt.subplot2grid((3, 2), (0, 0), colspan=2)
@@ -74,24 +87,63 @@ ax0.bar(range(60+21), confidence_intervals_5["Close"], width=0.3, color='pink', 
 ax0.set_ylabel("Precio Accion: "+str(symbol))
  
 maximo=max(confidence_intervals_5['Close'].max(),confidence_intervals_5['upper Close'].max())
-
 minimo=min(confidence_intervals_5['Close'].min(),confidence_intervals_5['lower Close'].min())
+
+# Add horizontal lines for min and max values
+ax0.axhline(y=min_close, color='blue', linestyle='--', label='Min Close')
+ax0.axhline(y=max_close, color='red', linestyle='--', label='Max Close')
+ax0.axhline(y=mean, color='green', linestyle='--', label='Mean Close')
 
 ax0.set_ylim(minimo-.25,maximo+.25)
 
-ax0.set_title('Time Series Forecasting')
+ax0.set_title('Time Series Forecasting for '+str(symbol))
 
+ax0.legend()
 
+"""
+# Inicializar SparkSession
+spark = SparkSession.builder.appName("YahooFinanceStreaming").getOrCreate()
+spark.conf.set("spark.network.timeout", "600s")
+spark.conf.send("spark.executor.heartbeatInterval", "120s")
+
+# Crear un esquema para el DataFrame de PySpark
+schema = StructType([
+    StructField("symbol", StringType(), True),
+    StructField("close", FloatType(), True),
+    StructField("timestamp", TimestampType(), True)
+])
+
+# Crear un DataFrame vacío con el esquema definido
+df_spark = spark.createDataFrame(spark.sparkContext.emptyRDD(), schema)
+df2 = pd.DataFrame(columns=['AAPL', 'AMZN', 'BAC', 'BRK-B', 'COST', 'GOOG', 'GOOGL', 'GS', 'HD', 'JPM', 'KO', 'LOW', 'MCD', 'META', 'NFLX', 'PEP', 'PG', 'TSLA', 'WFC', 'WMT'])
+
+# Function to update the data in the heatmap
+def update_ts(frame):
+
+    global df, correlation_matrix
+    # Simulate incoming data: appending new row of random data
+    new_row = np.random.randn(1, 5)  # Corrected to generate new data for all 10 variables
+    new_df = pd.DataFrame(new_row, columns=df.columns)
+    df = pd.concat([df, new_df], ignore_index=True)
+    
+    # Limit the size of df to the most recent 100 rows
+    df = df.tail(100)
+    
+    # Recalculate the correlation matrix
+    new_correlation_matrix = df.corr()
+    
+    # Efficiently update the existing heatmap data
+    for i in range(len(correlation_matrix.columns)):
+        for j in range(len(correlation_matrix.columns)):
+            ax1.texts[i * len(correlation_matrix.columns) + j].set_text(f"{new_correlation_matrix.iloc[i, j]:.2f}")
+            ax2.texts[i * len(correlation_matrix.columns) + j].set_text(f"{new_correlation_matrix.iloc[i, j]:.2f}")
+            ax3.texts[i * len(correlation_matrix.columns) + j].set_text(f"{new_correlation_matrix.iloc[i, j]:.2f}")
+            ax4.texts[i * len(correlation_matrix.columns) + j].set_text(f"{new_correlation_matrix.iloc[i, j]:.2f}")
+
+# Funcion animacion
+ani2 = FuncAnimation(fig, update_ts, frames=np.arange(0, 200), blit=False, interval=1000, repeat=True) 
+"""
 ##### MATRICES #####
-
-# Industries
-financial_services = ['BRK-B', 'JPM', 'BAC', 'WFC', 'GS']
-consumer_staples = ['PG', 'PEP', 'KO', 'COST', 'WMT']
-consumer_discretionary = ['AMZN', 'TSLA', 'MCD', 'HD', 'LOW']
-communication_services = ['META', 'GOOGL', 'GOOG', 'NFLX', 'AAPL']
-
-# Combinar todas las listas en una sola
-all_symbols = financial_services + consumer_staples + consumer_discretionary + communication_services
 
 # Creating a DataFrame with 10 variables and 100 observations
 data = {

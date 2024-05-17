@@ -43,3 +43,8 @@ This project aims to harness the capabilities of modern data processing framewor
 ```powershell
 streamlit run Dashboard_Streamlit.py
 ```
+
+
+## Additional Comments
+- The most optimal scenario would be to have a continuous and fast data stream. However, the YahooFinance library sends responses every 10 seconds. Given this situation, the animation is therefore not very visually appealing.
+- The dashboard will perform better during trading hours, as stock values are constantly changing

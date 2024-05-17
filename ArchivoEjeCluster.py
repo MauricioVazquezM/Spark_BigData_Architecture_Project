@@ -21,11 +21,6 @@ import matplotlib
 matplotlib.use('Agg')
 import os
 
-# Set the environment variables
-os.environ['PYSPARK_PYTHON'] = '/Users/santiagoolvera/anaconda3/bin/python3.11'
-os.environ['PYSPARK_DRIVER_PYTHON'] = '/Users/santiagoolvera/anaconda3/bin/python3.11'
-
-
 ## Layout set up
 st.set_page_config(page_title="Financial Analysis Dashboard", page_icon="📈", layout="wide")
 
@@ -75,8 +70,8 @@ financial_placeholder = col1.empty()
 staples_placeholder = col1.empty()
 discretionary_placeholder = col2.empty()
 communication_placeholder = col2.empty()
-
-for i in range(0, 10):
+current_time=datetime.now()
+for i in range(0, 5):
     for symbol in all_symbols:
         data = yf.download(symbol, interval='1m', period='1d')
         if not data.empty:
@@ -227,3 +222,5 @@ for i in range(0, 10):
             sns.heatmap(correlation_matrix_communication_services, annot=True, fmt=".2f", cmap='coolwarm')
             plt.title('Real-time Correlation Matrix Communication Services')
             st.pyplot(plt)
+latest_time=datetime.now()
+print(latest_time-current_time)

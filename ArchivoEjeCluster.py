@@ -149,3 +149,4 @@ all_symbols = financial_services + consumer_staples + consumer_discretionary+com
 timepo=obtener_datos_en_tiempo_real(all_symbols)
 
 print(timepo)
+spark.stop()
